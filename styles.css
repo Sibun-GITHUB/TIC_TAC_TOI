@@ -1,4 +1,6 @@
-* {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
 }
 
@@ -29,6 +31,7 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
+  cursor: pointer;
 }
 .cell:first-child,
 .cell:nth-child(2),
@@ -47,17 +50,75 @@ body {
 .cell:nth-child(3n) {
   border-right: none;
 }
-.cell.x::after,
-.cell.x::before {
+.cell.cross::after,
+.cell.cross::before {
+  background-color: black;
+}
+
+.board.cross .cell:not(.cross):not(.circle):hover::after,
+.board.cross .cell:not(.cross):not(.circle):hover::before {
+  background-color: lightgray;
+}
+.cell.cross::after,
+.cell.cross::before,
+.board.cross .cell:not(.cross).cell:not(.circle):hover::after,
+.board.cross .cell:not(.cross).cell:not(.circle):hover::before {
   position: absolute;
   content: "";
   width: calc(var(--mark-size) * 0.15);
   height: var(--mark-size);
-  background-color: black;
 }
-.cell.x::after {
+.cell.cross::after,
+.board.cross .cell:not(.cross).cell:not(.circle):hover::after {
   transform: rotate(45deg);
 }
-.cell.x::before {
+.cell.cross::before,
+.board.cross .cell:not(.cross).cell:not(.circle):hover::before {
   transform: rotate(-45deg);
+}
+.cell.circle::after,
+.board.circle .cell:not(.cross):not(.circle):hover::after {
+  content: "";
+  width: calc(var(--mark-size));
+  height: var(--mark-size);
+  border-radius: 50%;
+  border: calc(var(--mark-size) * 0.15) solid black;
+  position: absolute;
+}
+.cell.cross,
+.cell.circle {
+  cursor: not-allowed;
+}
+.board.circle .cell:not(.cross):not(.circle):hover::after {
+  border-color: lightgray;
+}
+
+.winning-message {
+  position: fixed;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.95);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  font-size: 5rem;
+  color: white;
+}
+.winning-message button {
+  font-size: 3rem;
+  background-color: white;
+  border: 1px solid black;
+  padding: 0.25em 0.5em;
+  cursor: pointer;
+}
+.winning-message button:hover {
+  background-color: black;
+  color: white;
+  border-color: white;
+}
+.winning-message.show {
+  display: flex;
 }
