@@ -33,6 +33,8 @@ function startGame() {
 }
 function endGame(draw) {
   if (draw) {
+    winningMessageTextElement.innerHTML = "Draw !";
+    winningMessageScreen.classList.add("show");
   } else {
     winningMessageTextElement.innerHTML = `${
       crossturn ? "Cross" : "Circle"
@@ -49,21 +51,33 @@ function restartGame() {
   crossturn = true;
   startGame();
 }
+function isDraw() {
+  return [...cells].every((cell) => {
+    return (
+      cell.classList.contains(CLASS_CIRCLE) ||
+      cell.classList.contains(CLASS_CROSS)
+    );
+  });
+}
 
 function handleClick(e) {
   // place the mark
   const cell = e.target;
   const currentClass = crossturn ? CLASS_CROSS : CLASS_CIRCLE;
   placeMark(cell, currentClass);
-  // check for win
-  if (checkWin(currentClass)) {
-    endGame(false);
-  }
 
-  // check for draw
-  // switch turns
-  switchTurn();
-  setCellHover();
+  if (checkWin(currentClass)) {
+    // check for win
+    endGame(false);
+  } else if (isDraw()) {
+    // check for draw
+    endGame(true);
+  } else {
+    // switch turns
+    console.log("else block called");
+    switchTurn();
+    setCellHover();
+  }
 }
 function placeMark(cell, currentClass) {
   cell.classList.add(currentClass);
